@@ -114,8 +114,17 @@ class DashboardActivity : AppCompatActivity() {
                             activity.updateToDo(list[p1])
                         }
                         R.id.menu_delete->{
-                            activity.dbHandler.deleteToDo(list[p1].id)
-                            activity.refreshList()
+                            val dialog = AlertDialog.Builder(activity)
+                            dialog.setTitle("Are you sure")
+                            dialog.setMessage("Do you want to delete this task ?")
+                            dialog.setPositiveButton("Continue") { _: DialogInterface, _: Int ->
+                                activity.dbHandler.deleteToDo(list[p1].id)
+                                activity.refreshList()
+                            }
+                            dialog.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
+
+                            }
+                            dialog.show()
                         }
                         R.id.menu_mark_as_completed->{
                             activity.dbHandler.updateToDoItemCompletedStatus(list[p1].id,true)

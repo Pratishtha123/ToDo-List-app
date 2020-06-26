@@ -5,25 +5,27 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paru.todo.DTO.ToDo
 import com.paru.todo.DTO.ToDoItem
 import kotlinx.android.synthetic.main.activity_item.*
+import java.util.*
 
 class ItemActivity : AppCompatActivity() {
 
     lateinit var dbHandler:DBHandler
     var todoId:Long=-1
+    var list:MutableList<ToDoItem>?=null
+    var adapter:ItemAdapter?=null
+    var touchHelper:ItemTouchHelper?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,28 @@ class ItemActivity : AppCompatActivity() {
             }
             dialog.show()
         }
+
+        touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(
+                p0: RecyclerView,
+                p1: RecyclerView.ViewHolder,
+                p2: RecyclerView.ViewHolder
+            ): Boolean {
+                val sourcePosition = p1.adapterPosition
+                val targetPosition = p2.adapterPosition
+                Collections.swap(list,sourcePosition,targetPosition)
+                adapter?.notifyItemMoved(sourcePosition,targetPosition)
+                return true
+            }
+
+            override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
+
+        touchHelper?.attachToRecyclerView(rv_item)
+
     }
 
     fun updateItem(item :ToDoItem ){
@@ -91,7 +115,9 @@ class ItemActivity : AppCompatActivity() {
     }
 
     private fun refreshList() {
-        rv_item.adapter = ItemAdapter(this,dbHandler.getToDoItems(todoId))
+        list=dbHandler.getToDoItems(todoId)
+        adapter=ItemAdapter(this,list!!)
+        rv_item.adapter = adapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -136,12 +162,20 @@ class ItemActivity : AppCompatActivity() {
             holder.edit.setOnClickListener{
                 activity.updateItem(list[p1])
             }
+
+            holder.move.setOnTouchListener { v, event ->
+                if(event.actionMasked== MotionEvent.ACTION_DOWN){
+                    activity.touchHelper?.startDrag(holder)
+                }
+                false
+            }
         }
 
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val itemName: CheckBox = v.findViewById(R.id.cv_item)
             val edit:ImageView=v.findViewById(R.id.iv_edit)
             val delete:ImageView=v.findViewById(R.id.iv_delete)
+            val move:ImageView=v.findViewById(R.id.iv_move)
         }
     }
 }
