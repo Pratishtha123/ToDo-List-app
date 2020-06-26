@@ -41,6 +41,7 @@ class ItemActivity : AppCompatActivity() {
 
         fab_item.setOnClickListener{
             val dialog = AlertDialog.Builder(this)
+            dialog.setTitle("Add Item")
             val view = layoutInflater.inflate(R.layout.dialog_dashboard, null)
             val toDoName = view.findViewById<EditText>(R.id.ev_todo)
             dialog.setView(view)
@@ -63,7 +64,7 @@ class ItemActivity : AppCompatActivity() {
 
     fun updateItem(item :ToDoItem ){
         val dialog = AlertDialog.Builder(this)
-        dialog.setTitle("Update ToDo Item")
+        dialog.setTitle("Update Item")
         val view = layoutInflater.inflate(R.layout.dialog_dashboard, null)
         val toDoName = view.findViewById<EditText>(R.id.ev_todo)
         toDoName.setText(item.itemName)
@@ -119,8 +120,17 @@ class ItemActivity : AppCompatActivity() {
             }
 
             holder.delete.setOnClickListener{
-                activity.dbHandler.deleteToDoItem(list[p1].id)
-                activity.refreshList()
+                val dialog = AlertDialog.Builder(activity)
+                dialog.setTitle("Are you sure")
+                dialog.setMessage("Do you want to delete this item ?")
+                dialog.setPositiveButton("Continue") { _: DialogInterface, _: Int ->
+                    activity.dbHandler.deleteToDoItem(list[p1].id)
+                    activity.refreshList()
+                }
+                dialog.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
+
+                }
+                dialog.show()
             }
 
             holder.edit.setOnClickListener{
