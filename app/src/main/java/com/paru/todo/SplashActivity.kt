@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
                 ic_logo.visibility = View.GONE
                 startActivity(Intent(this,DashboardActivity::class.java))
                 finish()
-            },500)
+            },1000)
         },1500)
     }
 }

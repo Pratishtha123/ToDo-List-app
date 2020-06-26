@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +36,7 @@ class DashboardActivity : AppCompatActivity() {
 
         fab_dashboard.setOnClickListener{
             val dialog:AlertDialog.Builder=AlertDialog.Builder(this)
+            dialog.setTitle("Add ToDo")
             val view=layoutInflater.inflate(R.layout.dialog_dashboard,null)
             val toDoName=view.findViewById<EditText>(R.id.ev_todo)
             dialog.setView(view)
@@ -52,6 +55,7 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onResume() {
         refreshList()
         super.onResume()
@@ -61,10 +65,10 @@ class DashboardActivity : AppCompatActivity() {
         rv_dashboard.adapter=DashboardAdapter(this,dbHandler.getToDo())
     }
 
-    class DashboardAdapter(val context: Context,val list:MutableList<ToDo>): RecyclerView.Adapter<DashboardAdapter.ViewHolder>()
+    class DashboardAdapter(val activity: DashboardActivity,val list:MutableList<ToDo>): RecyclerView.Adapter<DashboardAdapter.ViewHolder>()
     {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_dashboard_singlerow,parent,false))
+            return ViewHolder(LayoutInflater.from(activity).inflate(R.layout.rv_dashboard_singlerow,parent,false))
         }
 
         override fun getItemCount(): Int {
@@ -72,21 +76,21 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.toDoName.text=list[position].name
+            holder.toDoName.text = list[position].name
 
-            holder.toDoName.setOnClickListener{
-                val intent = Intent(context,ItemActivity::class.java)
-                intent.putExtra(INTENT_TODO_ID,list[position].id)
-                intent.putExtra(INTENT_TODO_NAME,list[position].name)
-                context.startActivity(intent)
+            holder.toDoName.setOnClickListener {
+                val intent = Intent(activity, ItemActivity::class.java)
+                intent.putExtra(INTENT_TODO_ID, list[position].id)
+                intent.putExtra(INTENT_TODO_NAME, list[position].name)
+                activity.startActivity(intent)
 
             }
 
         }
-
         class ViewHolder(v:View):RecyclerView.ViewHolder(v)
         {
             val toDoName:TextView=v.findViewById(R.id.tv_todo_name)
+            val menu:ImageView=v.findViewById(R.id.iv_menu)
         }
     }
 }

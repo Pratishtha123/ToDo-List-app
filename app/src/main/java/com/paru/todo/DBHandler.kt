@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.Typeface
 import android.util.ArraySet
 import com.paru.todo.DTO.ToDo
 import com.paru.todo.DTO.ToDoItem
@@ -41,6 +42,7 @@ class DBHandler(val context: Context):SQLiteOpenHelper(context, DB_NAME,null, DB
         return result != (-1).toLong()
     }
 
+
     fun getToDo():MutableList<ToDo>
     {
         val result:MutableList<ToDo> = ArrayList()
@@ -65,11 +67,15 @@ class DBHandler(val context: Context):SQLiteOpenHelper(context, DB_NAME,null, DB
         val cv = ContentValues()
         cv.put(COL_ITEM_NAME, item.itemName)
         cv.put(COL_TODO_ID, item.toDoId)
-        cv.put(COL_IS_COLPLETED, item.isCompleted)
+        if (item.isCompleted)
+            cv.put(COL_IS_COLPLETED, true)
+        else
+            cv.put(COL_IS_COLPLETED, false)
 
         val result = db.insert(TABLE_TODO_ITEM, null, cv)
         return result != (-1).toLong()
     }
+
 
     fun getToDoItems(todoId: Long): MutableList<ToDoItem> {
         val result: MutableList<ToDoItem> = ArrayList()
@@ -84,7 +90,7 @@ class DBHandler(val context: Context):SQLiteOpenHelper(context, DB_NAME,null, DB
                 item.toDoId = queryResult.getLong(queryResult.getColumnIndex(COL_TODO_ID))
                 item.itemName = queryResult.getString(queryResult.getColumnIndex(COL_ITEM_NAME))
                 item.isCompleted = queryResult.getInt(queryResult.getColumnIndex(COL_IS_COLPLETED)) == 1
-                item.toDoId=todoId
+                item.toDoId = todoId
                 result.add(item)
             } while (queryResult.moveToNext())
         }
@@ -92,6 +98,7 @@ class DBHandler(val context: Context):SQLiteOpenHelper(context, DB_NAME,null, DB
         queryResult.close()
         return result
     }
+
 
     fun updateToDoItem(item: ToDoItem) {
         val db = writableDatabase
