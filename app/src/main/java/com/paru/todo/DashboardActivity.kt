@@ -52,6 +52,28 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    fun updateToDo(toDo: ToDo){
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle("Update ToDo")
+        val view = layoutInflater.inflate(R.layout.dialog_dashboard, null)
+        val toDoName = view.findViewById<EditText>(R.id.ev_todo)
+        toDoName.setText(toDo.name)
+        dialog.setView(view)
+        dialog.setPositiveButton("Update") { _: DialogInterface, _: Int ->
+            if (toDoName.text.isNotEmpty()) {
+                toDo.name = toDoName.text.toString()
+                dbHandler.updateToDo(toDo)
+                refreshList()
+            }
+        }
+        dialog.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
+
+        }
+        dialog.show()
+    }
+
+
+
     override fun onResume() {
         refreshList()
         super.onResume()
@@ -89,7 +111,7 @@ class DashboardActivity : AppCompatActivity() {
 
                     when(it.itemId){
                         R.id.menu_edit->{
-                            
+                            activity.updateToDo(list[p1])
                         }
                         R.id.menu_delete->{
                             activity.dbHandler.deleteToDo(list[p1].id)
