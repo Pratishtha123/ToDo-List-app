@@ -104,6 +104,11 @@ class DBHandler(val context: Context):SQLiteOpenHelper(context, DB_NAME,null, DB
         return result != (-1).toLong()
     }
 
+    fun deleteToDoItem(itemId : Long){
+        val db = writableDatabase
+        db.delete(TABLE_TODO_ITEM,"$COL_ID=?" , arrayOf(itemId.toString()))
+    }
+
     fun getToDoItems(todoId: Long): MutableList<ToDoItem> {
         val result: MutableList<ToDoItem> = ArrayList()
 

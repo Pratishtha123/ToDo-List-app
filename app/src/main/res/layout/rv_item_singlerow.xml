@@ -6,6 +6,29 @@
         android:id="@+id/cv_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/iv_edit"
+        android:textSize="18sp"
+        android:textColor="#000000"
         android:padding="16dp"/>
+
+    <ImageView
+        android:id="@+id/iv_edit"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:src="@drawable/fab"
+        android:layout_toLeftOf="@id/iv_delete"
+        android:layout_centerVertical="true"
+        android:padding="8dp"/>
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/delete"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:padding="8dp"/>
+
 
 </RelativeLayout>

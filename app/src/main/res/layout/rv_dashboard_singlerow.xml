@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp">
 
     <TextView
         android:id="@+id/tv_todo_name"
@@ -8,14 +11,13 @@
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:textSize="20sp"
-        android:padding="16dp"/>
+        android:layout_marginLeft="16dp"/>
 
     <ImageView
         android:id="@+id/iv_menu"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:layout_marginTop="5dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_vertical_dot"
         android:padding="8dp"/>
