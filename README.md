@@ -4,5 +4,5 @@
 
 - simple ToDoList for everyday use
 
-- various features like edit,delete,drag,etc.
+- includes various features like edit,delete,drag,etc.
 
